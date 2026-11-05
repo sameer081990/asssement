@@ -1,0 +1,83 @@
+version: 2
+
+models:
+  - name: dim_users
+    description: One row per user.
+    config:
+      contract: {enforced: true}
+    columns:
+      - name: user_id
+        data_type: varchar
+        constraints: [{type: not_null}, {type: primary_key}]
+        data_tests: [unique, not_null]
+      - name: signup_date
+        data_type: date
+        constraints: [{type: not_null}]
+      - name: country
+        data_type: varchar
+        description: ISO-3166 alpha-2 country code.
+        constraints: [{type: not_null}]
+
+  - name: dim_episodes
+    description: One row per episode.
+    config:
+      contract: {enforced: true}
+    columns:
+      - name: episode_id
+        data_type: varchar
+        constraints: [{type: not_null}, {type: primary_key}]
+        data_tests: [unique, not_null]
+      - name: podcast_id
+        data_type: varchar
+      - name: episode_title
+        data_type: varchar
+      - name: release_date
+        data_type: date
+      - name: duration_seconds
+        data_type: integer
+        constraints: [{type: not_null}]
+
+  - name: fact_events
+    description: One row per valid user interaction event (play, pause, seek, complete).
+    config:
+      contract: {enforced: true}
+    columns:
+      - name: event_id
+        data_type: varchar
+        constraints: [{type: not_null}, {type: primary_key}]
+        data_tests: [unique, not_null]
+      - name: user_id
+        data_type: varchar
+        constraints: [{type: not_null}]
+        data_tests:
+          - relationships: {to: ref('dim_users'), field: user_id}
+      - name: episode_id
+        data_type: varchar
+        constraints: [{type: not_null}]
+        data_tests:
+          - relationships: {to: ref('dim_episodes'), field: episode_id}
+      - name: event_type
+        data_type: varchar
+        constraints: [{type: not_null}]
+        data_tests:
+          - accepted_values: {values: [play, pause, seek, complete]}
+      - name: event_ts
+        data_type: timestamp
+        constraints: [{type: not_null}]
+      - name: event_date
+        data_type: date
+        description: event_ts truncated to date; partition / cluster key.
+        constraints: [{type: not_null}]
+      - name: duration_seconds
+        data_type: integer
+        description: Only populated for play and complete events.
+      - name: _source_file
+        data_type: varchar
+      - name: _loaded_at
+        data_type: timestamp
+
+  - name: events_enriched
+    description: Valid events joined to user (country, signup) and episode (podcast, title, length) attributes.
+
+  - name: quarantined_events
+    description: Rejected events with the reason they failed validation.

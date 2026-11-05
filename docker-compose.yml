@@ -1,0 +1,16 @@
+# Single-container Airflow (standalone mode) for running the DAG locally.
+#   docker compose up --build            -> UI on http://localhost:8080
+#   docker compose exec airflow airflow dags test podcast_events_daily 2024-04-30
+services:
+  airflow:
+    build: .
+    command: standalone
+    ports:
+      - "8080:8080"
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/project/dags
+      PYTHONPATH: /opt/airflow/project          # so the DAG can import `pipeline`
+      DBT_SEND_ANONYMOUS_USAGE_STATS: "False"
+    volumes:
+      - ./:/opt/airflow/project

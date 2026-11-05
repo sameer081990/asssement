@@ -1,0 +1,10 @@
+__pycache__/
+.pytest_cache/
+data/*.duckdb
+dbt_project/target/
+dbt_project/logs/
+dbt_project/dbt_packages/
+
+# Employer-provided brief; not part of the submission
+Data Engineer Tech Test.pdf
+dbt_project/.user.yml

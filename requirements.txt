@@ -1,0 +1,5 @@
+duckdb>=1.0
+dbt-duckdb>=1.8
+pytest>=7
+# optional, only needed to run the DAG in Airflow:
+# apache-airflow>=2.7

@@ -1,4 +1,4 @@
-# Podcast Events Pipeline
+# Podcast Analytics Pipeline
 
 Batch pipeline that ingests raw podcast interaction logs (JSON), cleans and validates
 them with dbt, loads a star schema, and answers the engagement questions in SQL.

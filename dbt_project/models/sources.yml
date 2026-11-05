@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: raw
+    description: Untyped landing zone written by pipeline/ingest.py (one copy of each source file).
+    schema: raw
+    tables:
+      - name: event_logs
+        description: Raw interaction events, every column VARCHAR exactly as received.
+        columns:
+          - name: _source_file
+            description: File the row came from; used to replace-by-file on re-ingest.
+          - name: _loaded_at
+            description: Ingestion timestamp, used for incremental processing.

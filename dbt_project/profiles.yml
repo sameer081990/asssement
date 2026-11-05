@@ -1,0 +1,10 @@
+podcast_events:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      # Swap for the dbt-snowflake adapter in production; models use standard SQL
+      # apart from QUALIFY / try_cast / read_csv, which Snowflake also supports
+      # (or has direct equivalents for).
+      path: "{{ env_var('DBT_DUCKDB_PATH', '../data/podcast.duckdb') }}"
+      threads: 4

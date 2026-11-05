@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: stg_users
+    description: Typed users from users.csv.
+    columns:
+      - name: user_id
+        data_tests: [unique, not_null]
+
+  - name: stg_episodes
+    description: Typed episodes from episodes.csv.
+    columns:
+      - name: episode_id
+        data_tests: [unique, not_null]
+
+  - name: stg_events
+    description: >
+      All raw events, typed and normalised. reject_reason is null for valid rows,
+      otherwise the first rule the row failed.
